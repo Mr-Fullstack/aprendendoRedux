@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/immer@6.0.3/dist/immer.umd.development.js"></script>
+  <script src="https://unpkg.com/redux@4.1.2/dist/redux.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Oswald:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+
+  <div class="app">
+    <div class="info">
+      <div>
+        <p>Aluno:</p>
+        <span class="nome">Aluno</span>
+      </div>
+      <div>
+        <p>Email:</p>
+        <span class="email"></span>
+      </div>
+      <div>
+        <p>Minutos restantes:</p>
+        <span class="tempo"></span> <span class="minutes">min</span>
+      </div>
+      <div>
+        <p>Aulas finalizadas:</p>
+        <span class="aulas"></span>
+      </div>
+      <div class="cursos-list">
+        <p>Cursos / Aulas:</p>
+        <div class="cursos"></div>
+      </div>
+    </div>
+    <div class="dashboard">
+      <h1 class="dashboard__section-header-title">Dashboard</h1>
+      <section class="dashboard__section">
+        <div class="dashboard__section-header">
+          <h2 class="dashboard__section-header-title">Concluir aula</h2>
+        </div>
+        <div class="dashboard__section-content">
+          <div class="dashboard__section-content__input">
+            <input type="text" placeholder="id do curso" id="id-curso" value="" name="curso" />
+          </div>
+          <div class="dashboard__section-content__input">
+            <input type="text" placeholder="id da aula" id="id-aula" value="" name="aula" />
+          </div>
+        </div>
+        <div class="dashboard__section-action">
+          <input type="submit" value="Concluir" id="submit" class="button">
+        </div>
+      </section>
+      <section class="dashboard__section">
+        <div class="dashboard__section-header">
+          <h2 class="dashboard__section-header-title">Alterar email</h2>
+        </div>
+        <div class="dashboard__section-content">
+          <div class="dashboard__section-content__input">
+            <input type="email" placeholder="email" id="new-email">
+          </div>
+        </div>
+        <div class="dashboard__section-action">
+          <input type="submit" value="Trocar" id="trocar-email" class="button">
+        </div>
+      </section>
+      <section class="dashboard__section ">
+        <div class="dashboard__section-header">
+          <h2 class="dashboard__section-header-title">Minutos</h2>
+        </div>
+        <div class="dashboard__section-action">
+          <input type="submit" value="adicionar mais minutos" id="aumentar" class="button">
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module">
+    import { actions } from "./actions/actions.js";
+    import { reducers } from "./reducers/reducers.js";
+
+    const store = Redux.createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+    const submit = document.getElementById('submit');
+    const aumentar = document.getElementById('aumentar');
+    const trocarEmail = document.getElementById('trocar-email');
+
+    function render() {
+
+      const { aluno } = store.getState();
+      const nome = document.querySelectorAll('.nome')[0];
+      const email = document.querySelectorAll('.email')[0];
+      const tempo = document.querySelectorAll('.tempo')[0];
+      const aulas = document.querySelectorAll('.aulas')[0];
+      const cursos = document.querySelectorAll('.cursos')[0];
+
+      const listaAulasCompletas = new Set();
+
+
+      const completarCurso = (idCurso, idAula) => {
+        store.dispatch(actions.aluno.completarAula(idCurso, idAula));
+        store.dispatch(actions.aluno.reduzirTempoAula());
+      }
+
+      aluno.cursos.map(curso => curso.aulas.filter(aula => {
+        if (aula.completa === true) {
+          // const newAulaData = { ...aula, cursoId: curso.id }
+          // listaAulasCompletas.add(newAulaData);
+          listaAulasCompletas.add(aula);
+        }
+      }))
+
+      cursos.innerHTML = "";
+      let ccursoName = "";
+      aluno.cursos.map(curso => curso.aulas.filter(aula => {
+        if (!aula.completa) {
+
+          let ul = document.createElement("ul");
+          ul.id = curso.nome
+          let p = document.createElement("p");
+          let li = document.createElement("li");
+          let span = document.createElement("span");
+          let btn = document.createElement("button");
+
+          if (curso.nome !== ccursoName) {
+            ccursoName = curso.nome;
+            p.innerText = ccursoName;
+            cursos.appendChild(p);
+            cursos.appendChild(ul);
+          }
+          if (curso.nome === ccursoName) {
+            const ulCourse = document.getElementById(curso.nome);
+            span.innerText = aula.nome + `    `;
+            btn.innerHTML = "Concluir Aula";
+            btn.onclick = () => completarCurso(curso.id, aula.id);
+            li.appendChild(span);
+            li.appendChild(btn);
+            ulCourse.appendChild(li)
+          }
+        }
+      }))
+
+      if (cursos.children.length === 0) {
+        let p1 = document.createElement("p");
+        p1.innerText = "Cursos Concluídos!"
+        cursos.appendChild(p1);
+      }
+      aulas.innerText = listaAulasCompletas.size;
+      nome.innerText = aluno.nome;
+      email.innerText = aluno.email;
+      tempo.innerText = aluno.diasRestantes;
+    }
+    render();
+    aumentar.addEventListener('click', () => {
+      store.dispatch(actions.aluno.incrementarTempo())
+    })
+    store.subscribe(render);
+
+    submit.addEventListener('click', () => {
+      const idCurso = parseInt(document.getElementById('id-curso').value);
+      const idAula = parseInt(document.getElementById('id-aula').value);
+      store.dispatch(actions.aluno.completarAula(idCurso, idAula))
+    })
+    trocarEmail.addEventListener('click', () => {
+      const newEmail = document.getElementById('new-email').value;
+      store.dispatch(actions.aluno.modificarEmail(newEmail))
+    })
+
+
+  </script>
+</body>
+
+</html>

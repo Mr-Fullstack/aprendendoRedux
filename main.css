@@ -1,0 +1,234 @@
+:root {
+
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-oswald: 'Oswald', sans-serif;
+
+  --gray-1: #F1F1F1;
+  --gray-2: #E4E3E8;
+  --gray-3: #C9C8D0;
+  --gray-4: #5E5D62;
+  --gray-5: #282730;
+
+  --purple-1: #E9E4F6;
+  --purple-2: #DCD6EF;
+  --purple-3: #B9B6CB;
+  --purple-4: #7B759D;
+  --purple-5: #67618B;
+  --purple-6: #7D7A92;
+  --purple-7: #484365;
+
+  --dark-color: var(--gray-5);
+  --primary-color: var(--purple-7);
+  --secondary-color: var(--purple-4);
+  --terciary-color: var(--purple-6);
+  --button-color: var(--secondary-color);
+  --text-color-standard: #FFF;
+  --text-color-section: #FFF;
+  --button-color-text: var(--text-color-standard);
+
+}
+
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+input {
+  width: 100%;
+  height: 3.5rem;
+  border: .2rem solid var(--terciary-color);
+  text-align: center;
+  background-color: var(--gray-2);
+  font-family: var(--font-montserrat);
+}
+
+body {
+  font-size: 1.4rem;
+  min-height: 100vh;
+  font-family: var(--font-montserrat);
+}
+
+
+.button {
+  background-color: var(--button-color);
+  color: var(--button-color-text);
+  width: 15rem;
+  padding: 1.2rem;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.button:hover {
+  background-color: var(--purple-5);
+}
+
+.app {
+  background-color: var(--secondary-color);
+  display: flex;
+  justify-content: start;
+  scroll-snap-type: x mandatory;
+  overflow: auto hidden;
+  scroll-behavior: smooth;
+}
+
+.info {
+  background-color: var(--gray-1);
+  align-self: center;
+  justify-self: center;
+  height: 100vh;
+  min-width: 90%;
+  box-shadow: -1px 0px 12px 0px rgba(0, 0, 0, 0.35);
+  overflow: hidden auto;
+  scroll-snap-align: center;
+  flex: 1;
+}
+
+.dashboard {
+  flex: 1;
+  min-width: 100%;
+  background-color: var(--primary-color);
+  height: 100vh;
+  align-self: center;
+  justify-self: center;
+  box-shadow: -0.4rem 0rem 1.5rem 0rem rgba(72, 67, 101, 0.47);
+  padding: 2rem .8rem;
+  overflow: hidden auto;
+  text-align: center;
+  color: var(--text-color-standard);
+  scroll-snap-align: center;
+}
+
+.dashboard__section {
+  margin-top: 6.4rem;
+}
+
+.dashboard__section-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard__section-header-title {}
+
+.dashboard__section-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3.2rem;
+}
+
+.dashboard__section-content__input {
+  margin: 0px .8rem;
+  width: 100%;
+}
+
+.dashboard__section-action {
+  margin-top: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info {
+  padding-top: 3.2rem;
+}
+
+.info>div:not(.cursos-list) {
+  margin-bottom: 2rem;
+}
+
+.info>div {
+  padding: 0rem 3.2rem;
+}
+
+.info>div>p {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.info>div>span {
+  font-family: var(--font-oswald);
+  font-size: 2rem;
+  font-weight: 200;
+}
+
+.cursos-list {
+  overflow: hidden;
+  height: 73%;
+  padding-bottom: 3.5rem;
+}
+
+.cursos {
+  overflow: auto;
+  height: 90%;
+}
+
+.cursos p {
+  background-color: var(--purple-6);
+  color: #FFF;
+  padding: 1.8rem 1.6rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.cursos ul li {
+  padding: .8rem 1.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.6rem;
+  color: #8B8998;
+  height: 3.5rem;
+  font-family: var(--font-oswald);
+}
+
+.cursos ul li button {
+  background-color: transparent;
+  border: none;
+  text-transform: capitalize;
+  color: var(--purple-7);
+  font-size: 1.6rem;
+  cursor: pointer;
+  font-family: var(--font-oswald);
+}
+
+.cursos ul li button:hover {
+  color: var(--gray-5);
+}
+
+.cursos ul li:nth-child(even) {
+  background-color: var(--purple-1);
+}
+
+.cursos ul li:nth-child(odd) {
+  background-color: var(--purple-2);
+}
+
+@media screen and (min-width:769px) {
+  .app {
+    display: grid;
+    grid-template-columns: 29.599% 16.771%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .info {
+    overflow: hidden;
+  }
+
+  .info,
+  .dashboard {
+    min-width: 100%;
+  }
+}
